@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -103,4 +104,14 @@ public class LibraryService {
         Book book = books.get(record.getBookId());
         book.setAvailableCopies(book.getAvailableCopies() +1 );
     }
+
+    
+    public Collection<Book> getBooksByGenre(String genre) {
+        Collection<Book> allBooks = (Collection<Book>)(books.values());
+        return allBooks.stream()
+                .filter(book -> book.getGenre().toLowerCase().contains(genre.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
 }
+
