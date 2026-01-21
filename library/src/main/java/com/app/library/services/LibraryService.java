@@ -113,12 +113,28 @@ public class LibraryService {
                 .collect(Collectors.toList());
     }
 
-     public Collection<Book> getBooksByAuthorAndGenre(String author, String genre) {
+    public Collection<Book> getBooksByAuthorAndGenre(String author, String genre) {
         Collection<Book> allBooks = (Collection<Book>)(books.values());
         return allBooks.stream()
                 .filter(book -> book.getAuthor().equalsIgnoreCase(author)) // Filter by author
                 .filter(book -> genre == null || book.getGenre().toLowerCase().contains(genre.toLowerCase())) // Optional filter by 
                 .collect(Collectors.toList());
+    }
+
+    public Collection<Book> getBooksDueOnDate(LocalDate dueDate) {
+        Collection<BorrowingRecord> allRecords = (Collection<BorrowingRecord>)(borrowingRecords.values());
+        ArrayList<Book> dueBooks = new ArrayList<Book>();
+        Collection<BorrowingRecord> tempRecords = allRecords.stream()
+        .filter(record -> record.getDueDate().equals(dueDate)) // Filter by dueDate
+        .collect(Collectors.toList());
+        // For each filtered record, find the corresponding book and add it to the dueBooks list
+        for (BorrowingRecord record : tempRecords) {
+            Book book = books.get(record.getBookId());
+            if (book != null) {
+                dueBooks.add(book); // Add the book to the dueBooks list
+            }
+        }
+        return dueBooks;
     }
 
 }
