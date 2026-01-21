@@ -137,5 +137,23 @@ public class LibraryService {
         return dueBooks;
     }
 
+    public LocalDate checkAvailability(Long bookId) {
+        Collection<BorrowingRecord> allRecords = (Collection<BorrowingRecord>)(borrowingRecords.values());
+        Book bookToCheck = books.get(bookId);
+        if (bookToCheck == null) {
+            return null;
+        } else {
+            if (bookToCheck.getAvailableCopies() >= 1) {
+                return LocalDate.now();
+            } else {
+                List<BorrowingRecord> sortedRecords = allRecords.stream()
+                .filter(record -> record.getBookId() == bookId) // Filter by bookId
+                .sorted((b1, b2) -> b1.getDueDate().compareTo(b2.getDueDate())) // Sort by dueDate (soonest to latest)
+                .collect(Collectors.toList());
+                return sortedRecords.get(0).getDueDate();
+            }
+        }
+    }
+
 }
 
