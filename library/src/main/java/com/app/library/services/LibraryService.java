@@ -113,5 +113,13 @@ public class LibraryService {
                 .collect(Collectors.toList());
     }
 
+     public Collection<Book> getBooksByAuthorAndGenre(String author, String genre) {
+        Collection<Book> allBooks = (Collection<Book>)(books.values());
+        return allBooks.stream()
+                .filter(book -> book.getAuthor().equalsIgnoreCase(author)) // Filter by author
+                .filter(book -> genre == null || book.getGenre().toLowerCase().contains(genre.toLowerCase())) // Optional filter by 
+                .collect(Collectors.toList());
+    }
+
 }
 
